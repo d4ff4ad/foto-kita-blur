@@ -1,0 +1,490 @@
+/* ==========================================
+   AURA Cam Minimalist Mirror - style.css
+   ========================================== */
+
+:root {
+  --bg-dark: #000000;
+  --glass-bg: rgba(10, 11, 20, 0.55);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --accent-cyan: #06b6d4;
+  --accent-cyan-glow: rgba(6, 182, 212, 0.4);
+  --success-green: #10b981;
+  --success-green-glow: rgba(16, 185, 129, 0.5);
+  
+  --font-family: 'Outfit', sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-dark);
+  font-family: var(--font-family);
+  overflow: hidden;
+}
+
+/* Container - centers the mirror card and provides a premium ambient background */
+.mirror-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, #111428 0%, #030408 100%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* Hidden Video element to prevent browser media track throttling */
+#webcam {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* ==========================================
+   Ambient Background Blobs (Organic Neon Lights)
+   ========================================== */
+.bg-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(130px);
+  opacity: 0.22;
+  z-index: 1;
+  pointer-events: none;
+  animation: floatBlob 22s infinite alternate ease-in-out;
+}
+
+.blob-indigo {
+  width: 550px;
+  height: 550px;
+  background: #3b82f6; /* Glowing blue */
+  top: -120px;
+  left: -80px;
+}
+
+.blob-cyan {
+  width: 480px;
+  height: 480px;
+  background: #06b6d4; /* Neon Cyan */
+  bottom: -60px;
+  right: -60px;
+  animation-delay: -6s;
+}
+
+.blob-purple {
+  width: 520px;
+  height: 520px;
+  background: #a855f7; /* Violet Purple */
+  top: 35%;
+  left: 45%;
+  animation-delay: -12s;
+}
+
+@keyframes floatBlob {
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(60px, -50px) scale(1.15);
+  }
+  100% {
+    transform: translate(-30px, 40px) scale(0.9);
+  }
+}
+
+/* ==========================================
+   Mirror Viewport Card Bezel & Cyber Scanlines
+   ========================================== */
+.mirror-viewport {
+  position: relative;
+  width: 90%;
+  max-width: 1100px;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  max-height: 82vh;
+  z-index: 2;
+  border-radius: 32px;
+  border: 2px solid rgba(255, 255, 255, 0.08);
+  /* Bevel shadow styling */
+  box-shadow: 
+    0 30px 80px rgba(0, 0, 0, 0.9), 
+    inset 0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 12px 24px rgba(255, 255, 255, 0.03);
+  overflow: hidden;
+  background-color: #040406;
+  transition: border-color 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Sci-fi Overlay Scanlines */
+.mirror-viewport::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.12) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.02), rgba(0, 255, 0, 0.005), rgba(0, 0, 255, 0.02));
+  background-size: 100% 4px, 6px 100%;
+  z-index: 4;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+/* Glowing Border on Gesture Detected */
+.mirror-viewport.active-blur {
+  border-color: rgba(16, 185, 129, 0.3);
+  box-shadow: 
+    0 30px 85px rgba(0, 0, 0, 0.9), 
+    0 0 45px rgba(16, 185, 129, 0.18),
+    inset 0 0 25px rgba(16, 185, 129, 0.08),
+    inset 0 0 0 1px rgba(16, 185, 129, 0.25);
+}
+
+/* Canvas Viewfinder inside the card */
+#canvas-mirror {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* ==========================================
+   Floating Brand Header (Top Left)
+   ========================================== */
+.mirror-header {
+  position: absolute;
+  top: 28px;
+  left: 28px;
+  z-index: 10;
+  pointer-events: none;
+  animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.mirror-header .logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.mirror-header .logo span {
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+}
+
+.mirror-header .logo span .logo-alt {
+  color: var(--accent-cyan);
+  font-weight: 300;
+}
+
+.mirror-header .logo-icon {
+  color: var(--accent-cyan);
+  width: 18px;
+  height: 18px;
+  filter: drop-shadow(0 0 8px var(--accent-cyan-glow));
+}
+
+@keyframes slideInLeft {
+  0% { opacity: 0; transform: translateX(-15px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+/* ==========================================
+   Floating Status Badge (Top Right)
+   ========================================== */
+.gesture-badge {
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  border-radius: 30px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  pointer-events: none;
+  animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.badge-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: var(--accent-cyan);
+  box-shadow: 0 0 8px var(--accent-cyan-glow);
+  transition: all 0.3s;
+}
+
+.badge-text {
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Status Active State (✌️ Detected) */
+.gesture-badge.status-detected {
+  border-color: rgba(16, 185, 129, 0.35);
+  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.18);
+}
+
+.gesture-badge.status-detected .badge-dot {
+  background-color: var(--success-green);
+  box-shadow: 0 0 10px var(--success-green);
+  animation: pulseGreen 1s infinite alternate;
+}
+
+@keyframes slideInRight {
+  0% { opacity: 0; transform: translateX(15px); }
+  100% { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseGreen {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.35); opacity: 1; }
+}
+
+/* ==========================================
+   Minimal Floating Controls (Bottom Right)
+   ========================================== */
+.minimal-controls {
+  position: absolute;
+  bottom: 28px;
+  right: 28px;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+/* Settings Toggle Button */
+.control-toggle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #fff;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.control-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: scale(1.06);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.control-toggle i {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+}
+
+.control-toggle.active i {
+  transform: rotate(90deg);
+  color: var(--accent-cyan);
+}
+
+/* Settings Slider Panel */
+.slider-panel {
+  width: 280px;
+  background: rgba(12, 14, 28, 0.7);
+  backdrop-filter: blur(25px) saturate(190%);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(15px);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slider-panel.show {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+.slider-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+#blur-val {
+  color: var(--accent-cyan);
+  font-weight: 700;
+  background: rgba(6, 182, 212, 0.15);
+  padding: 2px 8px;
+  border-radius: 6px;
+  border: 1px solid rgba(6, 182, 212, 0.25);
+}
+
+/* Slider Style */
+.mirror-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
+}
+
+.mirror-slider::-webkit-slider-runnable-track {
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #6366f1 0%, var(--accent-cyan) 100%);
+}
+
+.mirror-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.8);
+  margin-top: -5px;
+  transition: transform 0.1s;
+}
+
+.mirror-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.3);
+  box-shadow: 0 0 12px var(--accent-cyan);
+}
+
+/* Slider Toggle Switch */
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.7);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 12px;
+  margin-top: 4px;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-toggle {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.12);
+  transition: .3s;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.slider-toggle:before {
+  position: absolute;
+  content: "";
+  height: 14px;
+  width: 14px;
+  left: 3px;
+  bottom: 3px;
+  background-color: white;
+  transition: .3s;
+  border-radius: 50%;
+}
+
+input:checked + .slider-toggle {
+  background-color: var(--accent-cyan);
+}
+
+input:checked + .slider-toggle:before {
+  transform: translateX(18px);
+}
+
+/* ==========================================
+   Help Badge (Bottom Center)
+   ========================================== */
+.help-badge {
+  position: absolute;
+  bottom: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  border-radius: 30px;
+  background: rgba(10, 10, 15, 0.65);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  animation: slideInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.help-badge.hide {
+  opacity: 0;
+  transform: translateX(-50%) translateY(15px);
+}
+
+.help-badge .emoji {
+  font-size: 1.25rem;
+  animation: bounce 2s infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+  60% { transform: translateY(-2px); }
+}
+
+@keyframes slideInUp {
+  0% { opacity: 0; transform: translate(-50%, 20px); }
+  100% { opacity: 1; transform: translate(-50%, 0); }
+}
+

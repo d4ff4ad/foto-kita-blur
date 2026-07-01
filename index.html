@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AURA Cam - Cermin Blur Otomatis (Gesture ✌️)</title>
+  
+  <!-- Google Fonts: Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  
+  <!-- MediaPipe Hands CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+  
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="mirror-container">
+    <!-- Ambient background glow blobs -->
+    <div class="bg-blob blob-indigo"></div>
+    <div class="bg-blob blob-cyan"></div>
+    <div class="bg-blob blob-purple"></div>
+    
+    <!-- Hidden video element, used only as source for canvas and MediaPipe -->
+    <video id="webcam" autoplay playsinline muted></video>
+    
+    <!-- Centered viewport card with natural aspect ratio -->
+    <div class="mirror-viewport" id="mirror-viewport">
+      <canvas id="canvas-mirror"></canvas>
+    </div>
+
+    <!-- Floating Brand Header -->
+    <header class="mirror-header">
+      <div class="logo">
+        <i data-lucide="sparkles" class="logo-icon"></i>
+        <span>AURA<span class="logo-alt">MIRROR</span></span>
+      </div>
+    </header>
+
+    <!-- Tiny floating status badge -->
+    <div id="gesture-badge" class="gesture-badge status-searching">
+      <span class="badge-dot"></span>
+      <span class="badge-text">Mencari ✌️</span>
+    </div>
+
+    <!-- Floating Minimal Controls (Auto-hides or stays clean at bottom) -->
+    <div class="minimal-controls">
+      <div class="control-toggle" id="control-toggle-btn" title="Pengaturan">
+        <i data-lucide="sliders-horizontal"></i>
+      </div>
+      
+      <div class="slider-panel" id="slider-panel">
+        <div class="slider-info">
+          <span>Kekuatan Blur</span>
+          <span id="blur-val">18px</span>
+        </div>
+        <input type="range" id="blur-slider" min="5" max="50" value="18" class="mirror-slider">
+        
+        <div class="toggle-row">
+          <span>Tampilkan Kerangka Jari</span>
+          <label class="switch">
+            <input type="checkbox" id="landmark-toggle" checked>
+            <span class="slider-toggle"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast/Helper Badge for initial instructions -->
+    <div class="help-badge" id="help-badge">
+      <span class="emoji">✌️</span>
+      <span class="text">Pose ✌️ di kamera untuk mengaktifkan blur</span>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
